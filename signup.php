@@ -4,7 +4,9 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -76,6 +78,9 @@
                         $result = mysqli_query($conn, $sql_query);
 
                         if ($result) {
+                            //Keep track of username in session
+                            $_SESSION['username'] = $s_username;   
+                            //Send user to main page
                             header("Location: index.php");
                         } else {
                             echo "Error";
