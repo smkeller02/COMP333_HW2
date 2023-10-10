@@ -4,7 +4,9 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -68,9 +70,10 @@
                     $row = mysqli_fetch_assoc($result);
                     //If username and password found, take user to main page, otherwise give incorrect username/pw
                     if($row > 0) {
-                        $out_value = "You have sucessfully logged in";
+                        //Keep track of username in session
+                        $_SESSION['username'] = $s_username;
+                        //Send user to main page
                         header("Location: index.php");
-                        exit;
                     } else {
                         $out_value = "Incorrect username or password.";
                     }

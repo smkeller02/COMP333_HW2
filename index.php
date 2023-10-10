@@ -4,7 +4,9 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -30,6 +32,14 @@
     </head>
 
     <body>
+        <p style="text-align: right;">
+            User: 
+            <?php 
+                echo $_SESSION['username']; 
+            ?>
+            </br><a href="logout.php">Log Out</a>
+        </p>
+
         <h2>
             Ratings Table:
         </h2>
