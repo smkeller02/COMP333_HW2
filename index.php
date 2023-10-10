@@ -28,3 +28,47 @@
         <link rel="stylesheet" href="style_sheet.css" />
 
     </head>
+
+    <body>
+        <h2>
+            Ratings Table:
+        </h2>
+
+        <?php 
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "music_db";
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            //display ratings_table
+            $sql_query = "SELECT artist, song, rating FROM ratings_table";
+            $result = mysqli_query($conn, $sql_query);
+
+            if (mysqli_num_rows($result) > 0) {
+                echo "<table border=1px><tr><th>Artist</th><th>Song</th><th>Rating</th></tr>";
+                // output data of each row
+                while($row = mysqli_fetch_assoc($result)) {
+                echo "<tr><td>" . $row["artist"]. "</td><td>" . $row['song'] . "</td><td>" . $row['rating'] . "</td></tr>";
+            }
+                echo "</table>";
+            } else {
+                echo "Nothing in database";
+            }
+        ?>
+
+
+        <p>
+            <a href="add_new_song.php">Add new song rating</a>
+        </p>
+
+    </body>
+
+</html>
