@@ -28,6 +28,7 @@
         <link rel="stylesheet" href="style_sheet.css" />
 
     </head>
+
     <body>
         <h2>
             Ratings Table:
@@ -71,4 +72,3 @@
     </body>
 
 </html>
-
