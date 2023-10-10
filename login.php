@@ -30,6 +30,13 @@
     </head>
 
     <body>
+        <h1>
+            Welcome to MusicUnited!
+        </h1>
+
+        <h2>
+            Login below:
+        </h2>
         <?php
             // Setting up variables
             $servername = "localhost";
@@ -94,10 +101,9 @@
 
         <!-- Button for if new user who wants to make an account -->
         <p style="padding-top: 20px">
-            Don't have an account?
+            Don't have an account? </br>
+            <a href="signup.php">Sign up here</a>
         </p>
-        <div><a href="signup.php">Sign up here</a></div>
-
 
     </body>
 </html>
