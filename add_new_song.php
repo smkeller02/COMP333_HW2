@@ -63,6 +63,7 @@
             if(isset($_REQUEST["submit"])){
                 // Variables for the output and the web form below.
                 $out_value = "";
+                $s_username = $_SESSION['username'];
                 $s_artist = $_REQUEST['artist'];
                 $s_song = $_REQUEST['song'];
                 $s_rating = $_REQUEST['rating'];
