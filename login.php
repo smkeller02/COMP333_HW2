@@ -62,7 +62,7 @@
                     //If username and password found, take user to main page, otherwise give incorrect username/pw
                     if($row > 0) {
                         $out_value = "You have sucessfully logged in";
-                        header("Location: main.php");
+                        header("Location: index.php");
                         exit;
                     } else {
                         $out_value = "Incorrect username or password.";
