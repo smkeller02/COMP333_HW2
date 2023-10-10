@@ -30,9 +30,13 @@
     </head>
 
     <body>
-        <p>
-        Sign Up Below!
-        </p>
+        <h1>
+            Welcome to MusicUnited!
+        </h1>
+
+        <h2>
+            Sign Up Below!
+        </h2>
 
         <?php
             // Setting up variables
@@ -57,19 +61,14 @@
                 $s_password2 = $_REQUEST['password2'];
 
                 // Check that the user entered data in the form.
-                if (!empty($s_username) && !empty($s_password)) {
+                if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
 
                     //Making sure username isn't already taken
                     $check_username = "SELECT * FROM user_table WHERE username = '$s_username'";
                     $result = mysqli_query($conn, $check_username);
 
-                    // get the post records
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
-                    $password2 = $_POST['password2'];
-
                     // If username isn't taken and passwords match, continue - otherwise give appropriate notice
-                    if (mysqli_num_rows($result) === 0 && $password === $password2) {
+                    if (mysqli_num_rows($result) === 0 && $s_password === $s_password2) {
 
                         // database insert SQL code
                         $sql_query = "INSERT INTO user_table (username, password) VALUES ('$s_username', '$s_password')";
@@ -79,10 +78,10 @@
                         if ($result) {
                             header("Location: index.php");
                         } else {
-                            echo "Error: " . $conn->error;;
+                            echo "Error";
                         }
 
-                    } else if ($password !== $password2) {
+                    } else if ($s_password !== $s_password2) {
                         $out_value = "Error: passwords don't match";
                     } else {
                         $out_value = "Username already taken. Please choose a different one.";
@@ -112,7 +111,12 @@
                     echo $out_value;
                 }
             ?></p>
-        </form>
+    </form>
+
+     <p>
+        Already have an account? </br>
+        <a href="login.php">Login here</a>
+    </p>
 
     </body>
 </html>
