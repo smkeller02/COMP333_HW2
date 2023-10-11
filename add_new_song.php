@@ -69,23 +69,27 @@
                 $s_rating = $_REQUEST['rating'];
 
                 // Check that the user entered data in the form.
-                if (!empty($s_artist) && !empty($s_song) && !empty($s_rating)) {
-                    //Check that user hasn't already rated the song
-                    $check = "SELECT * FROM ratings_table WHERE username = '$s_username' AND artist = '$s_artist' AND song = '$s_song'";
-                    $result = mysqli_query($conn, $check);
-                    if (mysqli_num_rows($result) > 0) {
-                        $out_value = "Error: Your have already rated this song. To change your rating navigate to the main page and click update next to the desired song.";
-                    } else {
-                    //If user hasn't, add data into table
-                    $sql_query = "INSERT INTO ratings_table (username, artist, song, rating) VALUES ('$s_username', '$s_artist', '$s_song', '$s_rating')";
-                        // insert in database 
-                        $result = mysqli_query($conn, $sql_query);
-
-                        if ($result) {                        
-                            header("Location: index.php");
+                if (!empty($s_artist) && !empty($s_song)) {
+                    if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
+                        $check = "SELECT * FROM ratings_table WHERE username = '$s_username' AND artist = '$s_artist' AND song = '$s_song'";
+                        $result = mysqli_query($conn, $check);
+                        $row_num = mysqli_num_rows($result);
+                        if ($row_num > 0) { //Checking if user rated song already
+                            $out_value = "Error: Your have already rated this song. To change your rating navigate to the main page and click update next to the desired song.";
                         } else {
-                            echo "Error: " . $conn->error;
+                            //If user hasn't, add data into table
+                            $sql_query = "INSERT INTO ratings_table (username, artist, song, rating) VALUES ('$s_username', '$s_artist', '$s_song', '$s_rating')";
+                            // insert in database 
+                            $result = mysqli_query($conn, $sql_query);
+
+                            if ($result) {                        
+                                header("Location: index.php");
+                            } else {
+                                echo "Error: " . $conn->error;
+                            }
                         }
+                    } else {
+                        $out_value = "Error: Rating must be between 1 and 5.";
                     }
 
             } else {

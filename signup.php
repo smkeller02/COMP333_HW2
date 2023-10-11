@@ -4,9 +4,6 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-<?php
-    session_start();
-?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -70,7 +67,7 @@
                     $result = mysqli_query($conn, $check_username);
 
                     // If username isn't taken and passwords match, continue - otherwise give appropriate notice
-                    if (mysqli_num_rows($result) === 0 && $s_password === $s_password2) {
+                    if (mysqli_num_rows($result) === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
 
                         // database insert SQL code
                         $sql_query = "INSERT INTO user_table (username, password) VALUES ('$s_username', '$s_password')";
@@ -78,6 +75,8 @@
                         $result = mysqli_query($conn, $sql_query);
 
                         if ($result) {
+                            //start session
+                            session_start();
                             //Keep track of username in session
                             $_SESSION['username'] = $s_username;   
                             //Send user to main page
@@ -87,13 +86,15 @@
                         }
 
                     } else if ($s_password !== $s_password2) {
-                        $out_value = "Error: passwords don't match";
+                        $out_value = "Error: passwords don't match.";
+                    } else if (strlen($s_password) < 10){
+                        $out_value = "Error: password isn't at least 10 characters long.";
                     } else {
-                        $out_value = "Username already taken. Please choose a different one.";
+                        $out_value = "Error: Username already taken. Please choose a different one.";
                     }
 
             } else {
-                $out_value = "Please enter a username and password.";
+                $out_value = "Error: Not all fields filled out. Please enter a username and password.";
             }
 
             // Close SQL connection.
@@ -104,7 +105,7 @@
      <!-- Sign up HTML form -->
      <form method="POST" action="signup.php">
             New Username: <input type="text" name="username" placeholder="Enter a username" /><br>
-            New Password: <input type="text" name="password" placeholder="Enter a password" /><br>
+            New Password (must be at least 10 characters long): <input type="text" name="password" placeholder="Enter a password" /><br>
             Re-Enter Password: <input type="text" name="password2" placeholder="Re-enter password" /><br>
             <input type="submit" name="submit" value="Sign Up"/>
             <!--
