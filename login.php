@@ -4,9 +4,6 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-<?php
-    session_start();
-?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -67,9 +64,11 @@
                     // Send the query and obtain the result.
                     // mysqli_query performs a query against the database.
                     $result = mysqli_query($conn, $sql_query);
-                    $row = mysqli_fetch_assoc($result);
+                    $row_num = mysqli_num_rows($result);
                     //If username and password found, take user to main page, otherwise give incorrect username/pw
-                    if($row > 0) {
+                    if($row_num > 0) {
+                        //start session
+                        session_start();
                         //Keep track of username in session
                         $_SESSION['username'] = $s_username;
                         //Send user to main page
@@ -78,7 +77,7 @@
                         $out_value = "Incorrect username or password.";
                     }
                 } else {
-                    $out_value = "Username not found";
+                    $out_value = "Error: Not all fields filled out";
                 }
             }
 
