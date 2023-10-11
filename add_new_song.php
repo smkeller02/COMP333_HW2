@@ -70,8 +70,13 @@
 
                 // Check that the user entered data in the form.
                 if (!empty($s_artist) && !empty($s_song) && !empty($s_rating)) {
-
-                    // add data into table
+                    //Check that user hasn't already rated the song
+                    $check = "SELECT * FROM ratings_table WHERE username = '$s_username' AND artist = '$s_artist' AND song = '$s_song'";
+                    $result = mysqli_query($conn, $check);
+                    if (mysqli_num_rows($result) > 0) {
+                        $out_value = "Error: Your have already rated this song. To change your rating navigate to the main page and click update next to the desired song.";
+                    } else {
+                    //If user hasn't, add data into table
                     $sql_query = "INSERT INTO ratings_table (username, artist, song, rating) VALUES ('$s_username', '$s_artist', '$s_song', '$s_rating')";
                         // insert in database 
                         $result = mysqli_query($conn, $sql_query);
@@ -81,6 +86,7 @@
                         } else {
                             echo "Error: " . $conn->error;
                         }
+                    }
 
             } else {
                 $out_value = "Error: Not all fields filled out";
