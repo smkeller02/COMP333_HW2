@@ -71,22 +71,38 @@
                 // Check that the user entered data in the form.
                 if (!empty($s_artist) && !empty($s_song)) {
                     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
-                        $check = "SELECT * FROM ratings_table WHERE username = '$s_username' AND artist = '$s_artist' AND song = '$s_song'";
-                        $result = mysqli_query($conn, $check);
-                        $row_num = mysqli_num_rows($result);
-                        if ($row_num > 0) { //Checking if user rated song already
-                            $out_value = "Error: Your have already rated this song. To change your rating navigate to the main page and click update next to the desired song.";
-                        } else {
-                            //If user hasn't, add data into table
-                            $sql_query = "INSERT INTO ratings_table (username, artist, song, rating) VALUES ('$s_username', '$s_artist', '$s_song', '$s_rating')";
-                            // insert in database 
-                            $result = mysqli_query($conn, $sql_query);
+                        $stmt = mysqli_prepare($conn, "SELECT username, artist, song FROM ratings_table WHERE username = ? AND artist = ? AND song = ?");
+                
+                        if ($stmt) {
+                            mysqli_stmt_bind_param($stmt, "sss", $s_username, $s_artist, $s_song);
+                            mysqli_stmt_execute($stmt);
+                            // Get result and check if user rated song already
+                            mysqli_stmt_store_result($stmt);
+                            $row_num = mysqli_stmt_num_rows($stmt);
 
-                            if ($result) {                        
-                                header("Location: index.php");
+                            if ($row_num > 0) { //Checking if user rated song already
+                                $out_value = "Error: You have already rated this song. To change your rating navigate to the main page and click update next to the desired song.";
                             } else {
-                                echo "Error: " . $conn->error;
+                                //If user hasn't, add data into table
+                                $stmt2 = mysqli_prepare($conn, "INSERT INTO ratings_table (username, artist, song, rating) VALUES (?, ?, ?, ?)");
+                                if ($stmt2) {
+                                    mysqli_stmt_bind_param($stmt2, "sssi", $s_username, $s_artist, $s_song, $s_rating);
+                                    // insert in database 
+                                    $result = mysqli_stmt_execute($stmt2);
+                                    if ($result) {                        
+                                        header("Location: index.php");
+                                    } else {
+                                        $out_value = "Error: " . $conn->error;
+                                    }
+                                    mysqli_stmt_close($stmt2);
+                                } else {
+                                $out_value = "Error: could not execute prepared statement ";
+                                }
                             }
+                            // Close statement
+                            mysqli_stmt_close($stmt);
+                        } else {
+                            $out_value = "Error: Could not execute prepared statement ";
                         }
                     } else {
                         $out_value = "Error: Rating must be between 1 and 5.";
