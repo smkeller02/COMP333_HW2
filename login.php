@@ -37,6 +37,8 @@
             Login below:
         </h2>
         <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
             // Setting up variables
             $servername = "localhost";
             $username = "root";
@@ -60,21 +62,29 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-                    $sql_query = "SELECT * FROM user_table WHERE username = ('$s_username') AND password = ('$s_password')";
-                    // Send the query and obtain the result.
-                    // mysqli_query performs a query against the database.
-                    $result = mysqli_query($conn, $sql_query);
-                    $row_num = mysqli_num_rows($result);
-                    //If username and password found, take user to main page, otherwise give incorrect username/pw
-                    if($row_num > 0) {
-                        //start session
-                        session_start();
-                        //Keep track of username in session
-                        $_SESSION['username'] = $s_username;
-                        //Send user to main page
-                        header("Location: index.php");
+                    $stmt = mysqli_prepare($conn,"SELECT * FROM user_table WHERE username = ? AND password = ?");
+                    if ($stmt) {
+                        // Bind parameters and execute query
+                        mysqli_stmt_bind_param($stmt, "ss", $s_username, $s_password);
+                        $result = mysqli_stmt_execute($stmt);
+                        // mysqli_query performs a query against the database.
+                        mysqli_stmt_store_result($stmt);
+                        $row_num = mysqli_stmt_num_rows($stmt);
+                        // Close statement
+                        mysqli_stmt_close($stmt);
+                        //If username and password found, take user to main page, otherwise give incorrect username/pw
+                        if($row_num > 0) {
+                            //start session
+                            session_start();
+                            //Keep track of username in session
+                            $_SESSION['username'] = $s_username;
+                            //Send user to main page
+                            header("Location: index.php");
+                        } else {
+                            $out_value = "Incorrect username and/or password.";
+                        }
                     } else {
-                        $out_value = "Incorrect username or password.";
+                        $out_value = "Error: Could not execute prepared statement";
                     }
                 } else {
                     $out_value = "Error: Not all fields filled out";
@@ -86,7 +96,7 @@
         ?>
 
         <!-- Log in HTML form for users already in database -->
-        <form method="GET" action="">
+        <form method="POST" action="">
             Username: <input type="text" name="username" placeholder="Enter username" /><br>
             Password: <input type="text" name="password" placeholder="Enter password" /><br>
             <input type="submit" name="submit" value="Submit"/>
@@ -103,7 +113,7 @@
 
         <!-- Button for if new user who wants to make an account -->
         <p style="padding-top: 20px">
-            Don't have an account? </br>
+            Don't have an account? <br>
             <a href="signup.php">Sign up here</a>
         </p>
 

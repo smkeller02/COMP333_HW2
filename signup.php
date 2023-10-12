@@ -61,36 +61,47 @@
 
                 // Check that the user entered data in the form.
                 if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
+                    // Making sure username isn't already taken
+                    $stmt = mysqli_prepare($conn, "SELECT * FROM user_table WHERE username = ?");
+                    
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, "s", $s_username);
+                        mysqli_stmt_execute($stmt);
+                        mysqli_stmt_store_result($stmt);
+                        $row_num = mysqli_stmt_num_rows($stmt);
+                        // Close statement
+                        mysqli_stmt_close($stmt);
+                        // If username isn't taken and passwords match, continue - otherwise give appropriate notice
+                        if ($row_num === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
+                            // Database insert SQL code
+                            $stmt2 = mysqli_prepare($conn, "INSERT INTO user_table (username, password) VALUES (?, ?)");
+                            
+                            if ($stmt2) {
+                                // Bind variable
+                                mysqli_stmt_bind_param($stmt2, "ss", $s_username, $s_password);
+                                // Insert in database
+                                $result = mysqli_execute($stmt2);
+                                // Close statement
+                                mysqli_stmt_close($stmt2);
+                                // Start session
+                                session_start();
+                                // Keep track of username in session
+                                $_SESSION['username'] = $s_username;   
+                                // Send user to main page
+                                header("Location: index.php");
+                            } else {
+                                $out_value = "Error executing prepared statement 2";
+                            }
 
-                    //Making sure username isn't already taken
-                    $check_username = "SELECT * FROM user_table WHERE username = '$s_username'";
-                    $result = mysqli_query($conn, $check_username);
-
-                    // If username isn't taken and passwords match, continue - otherwise give appropriate notice
-                    if (mysqli_num_rows($result) === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
-
-                        // database insert SQL code
-                        $sql_query = "INSERT INTO user_table (username, password) VALUES ('$s_username', '$s_password')";
-                        // insert in database
-                        $result = mysqli_query($conn, $sql_query);
-
-                        if ($result) {
-                            //start session
-                            session_start();
-                            //Keep track of username in session
-                            $_SESSION['username'] = $s_username;   
-                            //Send user to main page
-                            header("Location: index.php");
+                        } else if ($s_password !== $s_password2) {
+                            $out_value = "Error: passwords don't match.";
+                        } else if (strlen($s_password) < 10){
+                            $out_value = "Error: Password isn't at least 10 characters long.";
                         } else {
-                            echo "Error";
+                            $out_value = "Error: Username already taken. Please choose a different one.";
                         }
-
-                    } else if ($s_password !== $s_password2) {
-                        $out_value = "Error: passwords don't match.";
-                    } else if (strlen($s_password) < 10){
-                        $out_value = "Error: password isn't at least 10 characters long.";
                     } else {
-                        $out_value = "Error: Username already taken. Please choose a different one.";
+                        $out_value = "Error: Could not execute prepared statement";
                     }
 
             } else {
@@ -120,7 +131,7 @@
     </form>
 
      <p>
-        Already have an account? </br>
+        Already have an account? <br>
         <a href="login.php">Login here</a>
     </p>
 
