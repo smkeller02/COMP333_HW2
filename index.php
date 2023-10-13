@@ -48,9 +48,14 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
+<<<<<<< Updated upstream
             //display ratings_table
             $sql_query = "SELECT artist, song, rating FROM ratings_table";
             $result = mysqli_query($conn, $sql_query);
+=======
+            // Parametricize and prepare statment
+            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings");
+>>>>>>> Stashed changes
 
             if (mysqli_num_rows($result) > 0) {
                 echo "<table border=1px><tr><th>Artist</th><th>Song</th><th>Rating</th></tr>";

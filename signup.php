@@ -62,6 +62,40 @@
 
                 // Check that the user entered data in the form.
                 if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
+<<<<<<< Updated upstream
+=======
+                    // Making sure username isn't already taken
+                    $stmt = mysqli_prepare($conn, "SELECT * FROM user WHERE username = ?");
+                    
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, "s", $s_username);
+                        mysqli_stmt_execute($stmt);
+                        mysqli_stmt_store_result($stmt);
+                        $row_num = mysqli_stmt_num_rows($stmt);
+                        // Close statement
+                        mysqli_stmt_close($stmt);
+                        // If username isn't taken and passwords match, continue - otherwise give appropriate notice
+                        if ($row_num === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
+                            // Database insert SQL code
+                            $stmt2 = mysqli_prepare($conn, "INSERT INTO user (username, password) VALUES (?, ?)");
+                            
+                            if ($stmt2) {
+                                // Bind variable
+                                mysqli_stmt_bind_param($stmt2, "ss", $s_username, $s_password);
+                                // Insert in database
+                                $result = mysqli_execute($stmt2);
+                                // Close statement
+                                mysqli_stmt_close($stmt2);
+                                // Start session
+                                session_start();
+                                // Keep track of username in session
+                                $_SESSION['username'] = $s_username;   
+                                // Send user to main page
+                                header("Location: index.php");
+                            } else {
+                                $out_value = "Error executing prepared statement 2";
+                            }
+>>>>>>> Stashed changes
 
                     //Making sure username isn't already taken
                     $check_username = "SELECT * FROM user_table WHERE username = '$s_username'";

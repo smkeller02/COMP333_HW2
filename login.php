@@ -61,6 +61,7 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
+<<<<<<< Updated upstream
                     $sql_query = "SELECT * FROM user_table WHERE username = ('$s_username') AND password = ('$s_password')";
                     // Send the query and obtain the result.
                     // mysqli_query performs a query against the database.
@@ -71,6 +72,29 @@
                         $out_value = "You have sucessfully logged in";
                         header("Location: index.php");
                         exit;
+=======
+                    $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE username = ? AND password = ?");
+                    if ($stmt) {
+                        // Bind parameters and execute query
+                        mysqli_stmt_bind_param($stmt, "ss", $s_username, $s_password);
+                        $result = mysqli_stmt_execute($stmt);
+                        // mysqli_query performs a query against the database.
+                        mysqli_stmt_store_result($stmt);
+                        $row_num = mysqli_stmt_num_rows($stmt);
+                        // Close statement
+                        mysqli_stmt_close($stmt);
+                        //If username and password found, take user to main page, otherwise give incorrect username/pw
+                        if($row_num > 0) {
+                            //start session
+                            session_start();
+                            //Keep track of username in session
+                            $_SESSION['username'] = $s_username;
+                            //Send user to main page
+                            header("Location: index.php");
+                        } else {
+                            $out_value = "Incorrect username and/or password.";
+                        }
+>>>>>>> Stashed changes
                     } else {
                         $out_value = "Incorrect username or password.";
                     }
