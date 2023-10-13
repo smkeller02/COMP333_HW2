@@ -62,7 +62,7 @@
                 // Check that the user entered data in the form.
                 if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
                     // Making sure username isn't already taken
-                    $stmt = mysqli_prepare($conn, "SELECT * FROM user_table WHERE username = ?");
+                    $stmt = mysqli_prepare($conn, "SELECT * FROM user WHERE username = ?");
                     
                     if ($stmt) {
                         mysqli_stmt_bind_param($stmt, "s", $s_username);
@@ -74,7 +74,7 @@
                         // If username isn't taken and passwords match, continue - otherwise give appropriate notice
                         if ($row_num === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
                             // Database insert SQL code
-                            $stmt2 = mysqli_prepare($conn, "INSERT INTO user_table (username, password) VALUES (?, ?)");
+                            $stmt2 = mysqli_prepare($conn, "INSERT INTO user (username, password) VALUES (?, ?)");
                             
                             if ($stmt2) {
                                 // Bind variable

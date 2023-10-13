@@ -59,7 +59,7 @@
             }
 
             // Parametricize and prepare statment
-            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings_table");
+            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings");
 
             if ($stmt) {
                 // Execute prepared query and bind output of prepared statement to variables
