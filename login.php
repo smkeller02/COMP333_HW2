@@ -62,7 +62,7 @@ ini_set('display_errors', 1);
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-                    $stmt = mysqli_prepare($conn,"SELECT * FROM user_table WHERE username = ? AND password = ?");
+                    $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE username = ? AND password = ?");
                     if ($stmt) {
                         // Bind parameters and execute query
                         mysqli_stmt_bind_param($stmt, "ss", $s_username, $s_password);
