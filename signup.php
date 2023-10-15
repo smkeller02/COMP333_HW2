@@ -80,7 +80,7 @@
                                 // Bind variable
                                 mysqli_stmt_bind_param($stmt2, "ss", $s_username, $s_password);
                                 // Insert in database
-                                $result = mysqli_execute($stmt2);
+                                mysqli_execute($stmt2);
                                 // Close statement
                                 mysqli_stmt_close($stmt2);
                                 // Start session
@@ -92,7 +92,6 @@
                             } else {
                                 $out_value = "Error executing prepared statement 2";
                             }
-
                         } else if ($s_password !== $s_password2) {
                             $out_value = "Error: passwords don't match.";
                         } else if (strlen($s_password) < 10){
@@ -103,7 +102,6 @@
                     } else {
                         $out_value = "Error: Could not execute prepared statement";
                     }
-
             } else {
                 $out_value = "Error: Not all fields filled out. Please enter a username and password.";
             }

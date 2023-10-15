@@ -32,16 +32,16 @@
     </head>
 
     <body>
-        <p style="text-align: right;">
+        <p>
             User: 
-            <?php 
+                <?php
                 echo $_SESSION['username']; 
-            ?>
+                ?>
             </br><a href="logout.php">Log Out</a>
         </p>
 
         <h2>
-            Ratings Table:
+            Song Ratings:
         </h2>
 
         <?php 
@@ -59,17 +59,17 @@
             }
 
             // Parametricize and prepare statment
-            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings");
+            $stmt = mysqli_prepare($conn, "SELECT id, username, artist, song, rating FROM ratings");
+
 
             if ($stmt) {
                 // Execute prepared query and bind output of prepared statement to variables
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_bind_result($stmt, $artist, $song, $rating);
+                mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
                 // Create table
                 echo "<table border=1px";
-                echo "<tr><th>Artist</th><th>Song</th><th>Rating</th></tr>";
+                echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th></tr>";
                 while (mysqli_stmt_fetch($stmt)) {
-                    echo "<tr><td>$artist</td><td>$song</td><td>$rating</td></tr>";
+                    echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td></tr>";
                 }
                 echo "</table>";
                 // Close the statement
@@ -78,7 +78,6 @@
                 echo "Error: Could not execute prepared statekemtn ";
             }
         ?>
-
 
         <p>
             <a href="add_new_song.php">Add new song rating</a>
