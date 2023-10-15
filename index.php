@@ -67,9 +67,17 @@
                 mysqli_stmt_bind_result($stmt, $artist, $song, $rating);
                 // Create table
                 echo "<table border=1px";
-                echo "<tr><th>Artist</th><th>Song</th><th>Rating</th></tr>";
+                echo "<tr><th>Artist</th><th>Song</th><th>Rating</th><th>Action</th></tr>";
                 while (mysqli_stmt_fetch($stmt)) {
-                    echo "<tr><td>$artist</td><td>$song</td><td>$rating</td></tr>";
+                    echo "<tr><td>$artist</td><td>$song</td><td>$rating</td>";
+
+                    echo "<td>";
+                    echo "<a href='view.php'>View </a>";
+                    echo "<a href='update.php'>Update </a>";
+                    echo "<a href='delete.php'>Delete </a>";
+                    echo "</td>";
+
+                    echo "</tr>";
                 }
                 echo "</table>";
                 // Close the statement
