@@ -4,6 +4,9 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -55,22 +58,24 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            $s_id = $_SESSION['id'];
+            $s_id = $_REQUEST['id'];
 
             // Parametricize and prepare statment
-            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings WHERE id = ?");
+            $stmt = mysqli_prepare($conn, "SELECT username, artist, song, rating FROM ratings WHERE id =?");
 
             if ($stmt) {
                 // Execute prepared query and bind output of prepared statement to variables
-                mysqli_stmt_bind_param($stmt, "s", $id);
+                mysqli_stmt_bind_param($stmt, "i", $s_id);
                 mysqli_stmt_execute($stmt);
-                mysqli_stmt_bind_result($stmt, $artist, $song, $rating);
-
-                while (mysqli_stmt_fetch($stmt)) {
-                    // Display the user's information
-                    echo "<p>Artist: $artist</p>";
-                    echo "<p>Song: $song</p>";
-                    echo "<p>Rating: $rating</p>";
+                mysqli_stmt_bind_result($stmt, $username, $artist, $song, $rating);
+                
+                if (mysqli_stmt_fetch($stmt)) {
+                    echo "<p>Username</br></br> <strong>$username</strong></p>";
+                    echo "<p>Artist</br></br> <strong>$artist</strong></p>";
+                    echo "<p>Song</br></br> <strong>$song</strong></p>";
+                    echo "<p>Rating</br></br> <strong>$rating</strong></p>";
+                } else {
+                    echo "No data found for ID: $s_id";
                 }
 
                 // Close the statement
