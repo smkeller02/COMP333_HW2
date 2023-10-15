@@ -44,7 +44,9 @@
             Song Ratings:
         </h2>
 
-        <?php 
+        <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1); 
             $servername = "localhost";
             $username = "root";
             $password = "";
@@ -61,12 +63,12 @@
             // Parametricize and prepare statment
             $stmt = mysqli_prepare($conn, "SELECT id, username, artist, song, rating FROM ratings");
 
-
             if ($stmt) {
+                mysqli_stmt_execute($stmt);
                 // Execute prepared query and bind output of prepared statement to variables
                 mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
                 // Create table
-                echo "<table border=1px";
+                echo "<table border=1px>";
                 echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th></tr>";
                 while (mysqli_stmt_fetch($stmt)) {
                     echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td></tr>";
@@ -75,8 +77,10 @@
                 // Close the statement
                 mysqli_stmt_close($stmt);
             } else {
-                echo "Error: Could not execute prepared statekemtn ";
+                echo "Error: Could not execute prepared statement";
             }
+        // Close SQL connection.
+        $conn->close();
         ?>
 
         <p>
