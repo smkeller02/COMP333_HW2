@@ -33,7 +33,7 @@
 
     <body>
 
-        <p>
+        <p style="text-align: right;">
             User: 
                 <?php
                 echo $_SESSION['username']; 
@@ -85,10 +85,18 @@
                             } else {
                                 //If user hasn't, add data into table
                                 $stmt2 = mysqli_prepare($conn, "INSERT INTO ratings (username, artist, song, rating) VALUES (?, ?, ?, ?)");
-                                    // Close statement
+                                if ($stmt2) {
+                                    mysqli_stmt_bind_param($stmt2, "sssi", $s_username, $s_artist, $s_song, $s_rating);
+                                    // insert in database 
+                                    $result = mysqli_stmt_execute($stmt2);
+                                    if ($result) {                        
+                                        header("Location: index.php");
+                                    } else {
+                                        $out_value = "Error: " . $conn->error;
+                                    }
                                     mysqli_stmt_close($stmt2);
                                 } else {
-                                  $out_value = "Error: could not execute prepared statement 2";
+                                $out_value = "Error: could not execute prepared statement ";
                                 }
                             }
                             // Close statement
