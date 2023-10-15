@@ -45,6 +45,7 @@
         </h2>
 
         <?php
+        $loggedInUser = $_SESSION['username'];
         error_reporting(E_ALL);
         ini_set('display_errors', 1); 
             $servername = "localhost";
@@ -67,11 +68,23 @@
                 mysqli_stmt_execute($stmt);
                 // Execute prepared query and bind output of prepared statement to variables
                 mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
-                // Create table
+                mysqli_stmt_store_result($stmt);
+
                 echo "<table border=1px>";
-                echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th></tr>";
+                echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th><th>Action</th></tr>";
                 while (mysqli_stmt_fetch($stmt)) {
-                    echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td></tr>";
+                    echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td>";
+                    
+                    echo "<td>";
+                    echo "<a href='view.php?id=$id'>View </a>";
+
+                    if($username === $loggedInUser){
+                        echo "<a href='update.php?id=id'>Update </a>";
+                        echo "<a href='delete.php?id=id'>Delete </a>";
+                    }
+                
+                    echo "</td>";
+                    echo "</tr>";
                 }
                 echo "</table>";
                 // Close the statement
