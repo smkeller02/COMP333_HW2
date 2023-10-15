@@ -4,7 +4,6 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -61,7 +60,6 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-
                     $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE username = ? AND password = ?");
                     if ($stmt) {
                         // Bind parameters and execute query
@@ -96,7 +94,7 @@
         ?>
 
         <!-- Log in HTML form for users already in database -->
-        <form method="GET" action="">
+        <form method="POST" action="">
             Username: <input type="text" name="username" placeholder="Enter username" /><br>
             Password: <input type="text" name="password" placeholder="Enter password" /><br>
             <input type="submit" name="submit" value="Submit"/>
@@ -113,7 +111,7 @@
 
         <!-- Button for if new user who wants to make an account -->
         <p style="padding-top: 20px">
-            Don't have an account? </br>
+            Don't have an account? <br>
             <a href="signup.php">Sign up here</a>
         </p>
 

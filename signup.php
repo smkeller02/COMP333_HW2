@@ -4,7 +4,6 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -81,7 +80,7 @@
                                 // Bind variable
                                 mysqli_stmt_bind_param($stmt2, "ss", $s_username, $s_password);
                                 // Insert in database
-                                $result = mysqli_execute($stmt2);
+                                mysqli_execute($stmt2);
                                 // Close statement
                                 mysqli_stmt_close($stmt2);
                                 // Start session
@@ -93,17 +92,16 @@
                             } else {
                                 $out_value = "Error executing prepared statement 2";
                             }
-
-                    } else if ($s_password !== $s_password2) {
-                        $out_value = "Error: passwords don't match";
-                    } else if (strlen($s_password) < 10){
-                        $out_value = "Error: Password isn't at least 10 characters long.";
+                        } else if ($s_password !== $s_password2) {
+                            $out_value = "Error: passwords don't match.";
+                        } else if (strlen($s_password) < 10){
+                            $out_value = "Error: Password isn't at least 10 characters long.";
+                        } else {
+                            $out_value = "Error: Username already taken. Please choose a different one.";
+                        }
                     } else {
-                        $out_value = "Username already taken. Please choose a different one.";
+                        $out_value = "Error: Could not execute prepared statement";
                     }
-                } else {
-                    $out_value = "Error: Could not execute prepared statement";
-                }
             } else {
                 $out_value = "Error: Not all fields filled out. Please enter a username and password.";
             }
@@ -116,7 +114,7 @@
      <!-- Sign up HTML form -->
      <form method="POST" action="signup.php">
             New Username: <input type="text" name="username" placeholder="Enter a username" /><br>
-            New Password: <input type="text" name="password" placeholder="Enter a password" /><br>
+            New Password (must be at least 10 characters long): <input type="text" name="password" placeholder="Enter a password" /><br>
             Re-Enter Password: <input type="text" name="password2" placeholder="Re-enter password" /><br>
             <input type="submit" name="submit" value="Sign Up"/>
             <!--
@@ -131,7 +129,7 @@
     </form>
 
      <p>
-        Already have an account? </br>
+        Already have an account? <br>
         <a href="login.php">Login here</a>
     </p>
 

@@ -32,7 +32,7 @@
     </head>
 
     <body>
-        <p style="text-align: right;">
+        <p>
             User: 
                 <?php
                 echo $_SESSION['username']; 
@@ -61,9 +61,9 @@
             // Parametricize and prepare statment
             $stmt = mysqli_prepare($conn, "SELECT id, username, artist, song, rating FROM ratings");
 
+
             if ($stmt) {
                 // Execute prepared query and bind output of prepared statement to variables
-                mysqli_stmt_execute($stmt);
                 mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
                 // Create table
                 echo "<table border=1px";
