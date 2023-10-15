@@ -4,7 +4,9 @@
     Sydney Keller (smkeller@wesleyan.edu)
     Minji Woo (mwoo@wesleyan.edu)
 -->
-
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 
 <!-- Setting the language -->
@@ -30,8 +32,16 @@
     </head>
 
     <body>
+        <p style="text-align: right;">
+            User: 
+                <?php
+                echo $_SESSION['username']; 
+                ?>
+            </br><a href="logout.php">Log Out</a>
+        </p>
+
         <h2>
-            Ratings Table:
+            Song Ratings:
         </h2>
 
         <?php 
@@ -48,27 +58,26 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-<<<<<<< Updated upstream
-            //display ratings_table
-            $sql_query = "SELECT artist, song, rating FROM ratings_table";
-            $result = mysqli_query($conn, $sql_query);
-=======
             // Parametricize and prepare statment
-            $stmt = mysqli_prepare($conn, "SELECT artist, song, rating FROM ratings");
->>>>>>> Stashed changes
+            $stmt = mysqli_prepare($conn, "SELECT id, username, artist, song, rating FROM ratings");
 
-            if (mysqli_num_rows($result) > 0) {
-                echo "<table border=1px><tr><th>Artist</th><th>Song</th><th>Rating</th></tr>";
-                // output data of each row
-                while($row = mysqli_fetch_assoc($result)) {
-                echo "<tr><td>" . $row["artist"]. "</td><td>" . $row['song'] . "</td><td>" . $row['rating'] . "</td></tr>";
-            }
+            if ($stmt) {
+                // Execute prepared query and bind output of prepared statement to variables
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
+                // Create table
+                echo "<table border=1px";
+                echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th></tr>";
+                while (mysqli_stmt_fetch($stmt)) {
+                    echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td></tr>";
+                }
                 echo "</table>";
+                // Close the statement
+                mysqli_stmt_close($stmt);
             } else {
-                echo "Nothing in database";
+                echo "Error: Could not execute prepared statekemtn ";
             }
         ?>
-
 
         <p>
             <a href="add_new_song.php">Add new song rating</a>

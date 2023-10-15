@@ -62,8 +62,6 @@
 
                 // Check that the user entered data in the form.
                 if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
-<<<<<<< Updated upstream
-=======
                     // Making sure username isn't already taken
                     $stmt = mysqli_prepare($conn, "SELECT * FROM user WHERE username = ?");
                     
@@ -95,34 +93,19 @@
                             } else {
                                 $out_value = "Error executing prepared statement 2";
                             }
->>>>>>> Stashed changes
-
-                    //Making sure username isn't already taken
-                    $check_username = "SELECT * FROM user_table WHERE username = '$s_username'";
-                    $result = mysqli_query($conn, $check_username);
-
-                    // If username isn't taken and passwords match, continue - otherwise give appropriate notice
-                    if (mysqli_num_rows($result) === 0 && $s_password === $s_password2) {
-
-                        // database insert SQL code
-                        $sql_query = "INSERT INTO user_table (username, password) VALUES ('$s_username', '$s_password')";
-                        // insert in database
-                        $result = mysqli_query($conn, $sql_query);
-
-                        if ($result) {
-                            header("Location: index.php");
-                        } else {
-                            echo "Error";
-                        }
 
                     } else if ($s_password !== $s_password2) {
                         $out_value = "Error: passwords don't match";
+                    } else if (strlen($s_password) < 10){
+                        $out_value = "Error: Password isn't at least 10 characters long.";
                     } else {
                         $out_value = "Username already taken. Please choose a different one.";
                     }
-
+                } else {
+                    $out_value = "Error: Could not execute prepared statement";
+                }
             } else {
-                $out_value = "Please enter a username and password.";
+                $out_value = "Error: Not all fields filled out. Please enter a username and password.";
             }
 
             // Close SQL connection.

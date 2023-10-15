@@ -61,18 +61,7 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-<<<<<<< Updated upstream
-                    $sql_query = "SELECT * FROM user_table WHERE username = ('$s_username') AND password = ('$s_password')";
-                    // Send the query and obtain the result.
-                    // mysqli_query performs a query against the database.
-                    $result = mysqli_query($conn, $sql_query);
-                    $row = mysqli_fetch_assoc($result);
-                    //If username and password found, take user to main page, otherwise give incorrect username/pw
-                    if($row > 0) {
-                        $out_value = "You have sucessfully logged in";
-                        header("Location: index.php");
-                        exit;
-=======
+
                     $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE username = ? AND password = ?");
                     if ($stmt) {
                         // Bind parameters and execute query
@@ -94,12 +83,11 @@
                         } else {
                             $out_value = "Incorrect username and/or password.";
                         }
->>>>>>> Stashed changes
                     } else {
-                        $out_value = "Incorrect username or password.";
+                        $out_value = "Error: Could not execute prepared statement";
                     }
                 } else {
-                    $out_value = "Username not found";
+                    $out_value = "Error: Not all fields filled out";
                 }
             }
 
