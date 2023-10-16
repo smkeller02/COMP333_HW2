@@ -69,35 +69,85 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-
             if (isset($_REQUEST["submit"])) {
                 $s_username = $_SESSION['username'];
                 $s_artist = $_REQUEST['artist'];
                 $s_song = $_REQUEST['song'];
                 $s_rating = $_REQUEST['rating'];
-            
-                if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
-                    $stmt = $conn->prepare("UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE username = ?");
-            
-                    if ($stmt) {
-                        mysqli_stmt_bind_param($stmt, "ssis", $s_artist, $s_song, $s_rating, $s_username);
-                        $result = mysqli_stmt_execute($stmt);
-
-                        if ($result) {                        
-                            header("Location: index.php");
+                $s_id = $_REQUEST['id'];
+    
+                if(isset($_GET['id']) && !empty($_GET['id'])){
+                    if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
+                        $check_stmt = $conn->prepare("SELECT * FROM ratings WHERE username = ? AND song = ? AND artist=? AND id=?");
+                        // Preparing statement
+                        // $stmt = $conn->prepare("UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE id = ?");
+                        if ($stmt) {
+                            // Bind parameters and execute
+                            mysqli_stmt_bind_param($stmt, "ssii", $s_artist, $s_song, $s_rating, $s_id);
+                            $result = mysqli_stmt_execute($stmt);
+                            // If successful, redirect to main page, else show error
+                            if ($result) {                        
+                                header("Location: index.php");
+                                exit();
+                            } else {
+                                $out_value = "Error: " . $conn->error;
+                            }
+                            // Close statment
                         } else {
-                            $out_value = "Error: " . $conn->error;
+                            $out_value = "Error: Could not execute prepared statement ";
                         }
-                        mysqli_stmt_close($stmt);
                     } else {
-                        $out_value = "Error: Could not execute prepared statement ";
-                    }
-                } else {
                     $out_value = "Error: Rating must be between 1 and 5.";
+                    mysqli_stmt_close($stmt);
+                }
+
+                    // if(!empty($s_song) && !empty($s_artist) && !empty($s_rating)){
+                    //     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
+                    //         $check_stmt = $conn->prepare("SELECT * FROM ratings WHERE username = ? AND song = ? AND artist=? AND id=?");
+                    //         // $stmt = $conn->prepare("UPDATE ratings SET rating = ? WHERE username = ? AND song = ? AND artist = ?");
+                        
+                    //         if ($check_stmt) {
+                    //             mysqli_stmt_bind_param($check_stmt, "sssi", $s_username, $s_song, $s_artist, $s_id);
+                    //             mysqli_stmt_execute($check_stmt);
+                    //             mysqli_stmt_store_result($check_stmt);
+    
+                    //             if (mysqli_stmt_num_rows($check_stmt) > 1) {
+                    //                 // The user has the same song already rated in database
+                    //                 $out_value = "Error: You have already rated this song.";
+                    //             } else {
+                    //                 The user has not rated this song yet, so update
+                    //                 $update_stmt = $conn->prepare("UPDATE ratings SET song = ?, artist = ?, rating = ? WHERE id = ?");
+                                        
+                    //                 if ($update_stmt) {
+                    //                     mysqli_stmt_bind_param($update_stmt, "ssii", $s_song, $s_artist, $s_rating, $s_id);
+                    //                     $result = mysqli_stmt_execute($update_stmt);
+                                            
+                    //                     if ($result) {
+                    //                         header("Location: index.php");
+                    //                     } else {
+                    //                         $out_value = "Error: " . $conn->error;
+                    //                     }
+                    //                     mysqli_stmt_close($update_stmt);
+                    //                 } else {
+                    //                     $out_value = "Error: Could not execute the update prepared statement";
+                    //                 }
+                    //             }
+                    //             mysqli_stmt_close($check_stmt);
+                    //         } else {
+                    //             $out_value = "Error: Could not execute prepared statement ";
+                    //         }
+                    //     } else {
+                    //         $out_value = "Error: Rating must be between 1 and 5.";
+                    //     }
+                    // } else {
+                    //     $out_value = "Error: Not all fields filled out";
+                    // }
                 }
             }
+    
 
-            $s_id = $_REQUEST['id'];
+
+            $s_id = $_GET['id'];
 
             // Parametricize and prepare statment
             $stmt = mysqli_prepare($conn, "SELECT username, artist, song, rating FROM ratings WHERE id =?");
@@ -124,10 +174,10 @@
         ?>
 
         <!-- Log in HTML form for users already in database -->
-        <form method="GET" action="">
+        <form method="POST" action="">
             Artist <input type="text" name="artist" placeholder="Enter the artist" value="<?php echo $current_artist; ?>"/><br>
             Song <input type="text" name="song" placeholder="Enter the song title" value="<?php echo $current_song; ?>"/><br>
-            Rating <input type="text" name="rating" placeholder="Enter your rating" value="<?php echo $current_rating; ?>"/><br>
+            Rating <input type="number" name="rating" placeholder="Enter your rating" value="<?php echo $current_rating; ?>"/><br>
             <input type="submit" name="submit" value="Submit"/>
             <p>
                 <a href="index.php">Cancel</a>
