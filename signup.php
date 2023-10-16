@@ -23,9 +23,6 @@
 
         <title>MusicUnited Sign Up</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
@@ -61,10 +58,11 @@
 
                 // Check that the user entered data in the form.
                 if (!empty($s_username) && !empty($s_password) && !empty($s_password2)) {
-                    // Making sure username isn't already taken
+                    // Prepare statement
                     $stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE username = ?");
                     
                     if ($stmt) {
+                        // Bind parameter, execute, then store
                         mysqli_stmt_bind_param($stmt, "s", $s_username);
                         mysqli_stmt_execute($stmt);
                         mysqli_stmt_store_result($stmt);
@@ -73,7 +71,7 @@
                         mysqli_stmt_close($stmt);
                         // If username isn't taken and passwords match, continue - otherwise give appropriate notice
                         if ($row_num === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
-                            // Database insert SQL code
+                            // Prepare insertion
                             $stmt2 = mysqli_prepare($conn, "INSERT INTO users (username, password) VALUES (?, ?)");
                             
                             if ($stmt2) {
@@ -92,10 +90,13 @@
                             } else {
                                 $out_value = "Error executing prepared statement 2";
                             }
+                        //If passwords dont match, show correct error
                         } else if ($s_password !== $s_password2) {
                             $out_value = "Error: passwords don't match.";
+                        //If password is less than 10 char
                         } else if (strlen($s_password) < 10){
                             $out_value = "Error: Password isn't at least 10 characters long.";
+                        //If username already taken
                         } else {
                             $out_value = "Error: Username already taken. Please choose a different one.";
                         }
