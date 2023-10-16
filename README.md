@@ -123,3 +123,5 @@ https://www.w3schools.com/PHP/php_mysql_update.asp - updating the sql database v
 https://alexwebdevelop.com/php-password-hashing/ - understanding password hash
 https://www.geeksforgeeks.org/how-to-secure-hash-and-salt-for-php-passwords/ - understanding password hash
 https://www.w3schools.com/PHP/php_mysql_delete.asp - deleting the row in sql database via php
+https://stackoverflow.com/questions/14554517/php-commands-out-of-sync-error - How to fix commands out of sync error
+https://www.php.net/manual/en/mysqli-stmt.bind-result.php - learning how to use mysqli_stmt_bind_param()
