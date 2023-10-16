@@ -57,6 +57,9 @@ login.php - login page for current users
 signup.php - signup page for new users
 add_new_song.php - page for users to add a new song and rating to the datatable
 logout.php - logs out current user by destroying session and takes user back to login page
+delete.php - prompts user to make sure they want to delete given song, then if yes, deletes it (only can be done with the users data, no one else)
+update.php - updates song, artist, and/or rating for user (only can be done with the users data, no one else)
+view.php - displays a clean page of a given rating including song, artist, rating, and username of rater
 Sydney_XAMPP - Screenshot of local XAMPP developement environment
 Sydney_user_table_structure.png - Screenshot of user_table structure from phpMyAdmin
 Sydney_user_table.png - Screenshot of user_table from phpMyAdmin
@@ -73,6 +76,3 @@ https://stackoverflow.com/questions/13624276/how-to-separate-table-rows-with-a-l
 https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message - needed to learn how to change commit message
 https://stackoverflow.com/questions/6472123/why-is-php-session-destroy-not-working - could not figure out why session_destroy() wasn’t working
 https://www.geeksforgeeks.org/php-strlen-function/ - make sure password is at least 10 char long
-Query_Parameterization_Cheat_Sheet.html - learning to make SQL queries parameterized
-https://stackoverflow.com/questions/36366754/parameterized-queries-in-php-with-mysql-connection - learning to make SQL queries parameterized
-https://www.diffen.com/difference/GET-vs-POST-HTTP-Requests#:~:text=GET%20is%20less%20secure%20compared,or%20in%20web%20server%20logs - GET vs POST for security purposes for logging in and signing up users
