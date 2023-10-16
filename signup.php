@@ -71,12 +71,14 @@
                         mysqli_stmt_close($stmt);
                         // If username isn't taken and passwords match, continue - otherwise give appropriate notice
                         if ($row_num === 0 && $s_password === $s_password2 && strlen($s_password) >= 10) {
+                            $hashed_password = password_hash($s_password, PASSWORD_DEFAULT);
+
                             // Prepare insertion
                             $stmt2 = mysqli_prepare($conn, "INSERT INTO users (username, password) VALUES (?, ?)");
                             
                             if ($stmt2) {
                                 // Bind variable
-                                mysqli_stmt_bind_param($stmt2, "ss", $s_username, $s_password);
+                                mysqli_stmt_bind_param($stmt2, "ss", $s_username, $hashed_password);
                                 // Insert in database
                                 mysqli_execute($stmt2);
                                 // Close statement
