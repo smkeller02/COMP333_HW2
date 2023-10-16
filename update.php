@@ -43,13 +43,7 @@
         </h1>
 
         <p>
-            Here you can update your ratings.
-        </p>
-        <p>
-            Username: 
-            <?php 
-                echo $_SESSION['username']; 
-            ?>
+            Update your ratings here:
         </p>
 
         <?php
@@ -79,50 +73,39 @@
                 // Check that the user entered data in the form.
                 if (!empty($s_artist) && !empty($s_song) && !empty($s_rating)) {
                     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
-                        // Check if the rating exists
-                        $check_query = "SELECT * FROM ratings WHERE username = ? AND song = ? AND artist = ? AND id = ?";
-                        $check_stmt = mysqli_prepare($conn, $check_query);
-                        mysqli_stmt_bind_param($check_stmt, "ssii", $s_username, $s_song, $s_artist, $s_id);
-                        mysqli_stmt_execute($check_stmt);
-                        mysqli_stmt_store_result($check_stmt);
-                        $rows = mysqli_stmt_num_rows($check_stmt);
-                        mysqli_stmt_close($check_stmt);
-            
-                        if ($rows > 0) {
-                            // Check that user isnt updating their artist and song to an artist and song they have already rated under a different ID
-                            $check_duplicate_query = "SELECT id FROM ratings WHERE username = ? AND artist = ? AND song = ? AND id != ?";
-                            $check_duplicate_stmt = mysqli_prepare($conn, $check_duplicate_query);
-                            mysqli_stmt_bind_param($check_duplicate_stmt, "ssii", $s_username, $s_artist, $s_song, $s_id);
-                            mysqli_stmt_execute($check_duplicate_stmt);
-                            mysqli_stmt_store_result($check_duplicate_stmt);
-                            $duplicate_rows = mysqli_stmt_num_rows($check_duplicate_stmt);
-                            mysqli_stmt_close($check_duplicate_stmt);
+                        // Check that user isnt updating their artist and song to an artist and song they have already rated under a different ID
+                        // Check if the combination of artist and song already exists for the user
+                        $check_duplicate_stmt = mysqli_prepare($conn, "SELECT id FROM ratings WHERE username = ? AND artist = ? AND song = ?");
+                        mysqli_stmt_bind_param($check_duplicate_stmt, "sss", $s_username, $s_artist, $s_song);
+                        mysqli_stmt_execute($check_duplicate_stmt);
+                        $duplicate_id = -1; // Initialize to an invalid ID
 
-                        if ($duplicate_rows > 0) {
-                            $out_value = "Error: You've already rated this artist and song under a different ID.";
-                        } else {
+                        mysqli_stmt_bind_result($check_duplicate_stmt, $duplicate_id);
+                        mysqli_stmt_fetch($check_duplicate_stmt);
+                        // Close the statement
+                        mysqli_stmt_close($check_duplicate_stmt);
+
+                        if ($duplicate_id == -1 || $duplicate_id == $s_id) {
                             // Update the rating
-                            $update_query = "UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE id = ?";
-                            $stmt = mysqli_prepare($conn, $update_query);
+                            $stmt = mysqli_prepare($conn, "UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE id = ?");
                             mysqli_stmt_bind_param($stmt, "ssii", $s_artist, $s_song, $s_rating, $s_id);
                             $result = mysqli_stmt_execute($stmt);
+                            //echo ("stmt =" . $result);
                             if ($result) {
                                 header("Location: index.php");
                             } else {
                                 $out_value = "Error: " . mysqli_error($conn);
                             }
                             mysqli_stmt_close($stmt);
+                        } else {
+                            $out_value = "Error: You've already rated this artist and song under a different ID.";
                         }
-                    } else {
-                        $out_value = "Error: You have already rated this song under a different ID.";
-                    }
                     } else {
                         $out_value = "Error: Rating must be between 1 and 5.";
                     }
                 } else {
                     $out_value = "Error: Not all fields filled out";
                 }
-
             }     
 
         // Auto-fill form
