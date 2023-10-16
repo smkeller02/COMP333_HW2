@@ -63,16 +63,15 @@
 
 
             if (isset($_POST["submit"])) {
-                $s_username = $_SESSION['username'];
+                $s_id = $_REQUEST['id'];
                 
                 // Prepare deletion statement
-                $stmt = $conn->prepare("DELETE FROM ratings WHERE username = ?");
+                $stmt = $conn->prepare("DELETE FROM ratings WHERE id = ?");
             
                 if ($stmt) {
-                    // Bind and execute statement
-                    mysqli_stmt_bind_param($stmt, "s", $s_username);
+                    // Execute prepared query and bind output of prepared statement to variables
+                    mysqli_stmt_bind_param($stmt, "i", $s_id);
                     $result = mysqli_stmt_execute($stmt);
-
                     // Send user back to main page if statement executed correctly, else show error
                     if ($result) {   
                         header("Location: index.php");
