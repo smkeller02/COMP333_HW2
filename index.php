@@ -36,7 +36,7 @@
                 <?php
                 echo $_SESSION['username']; 
                 ?>
-            </br><a href="logout.php">Log Out</a>
+            </br><a href="./signup,login,out/logout.php">Log Out</a>
         </p>
 
         <h2>
@@ -73,11 +73,11 @@
                     echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td>";
                     //Create appropriate actions column depending on who is logged in
                     echo "<td>";
-                    echo "<a href='view.php?id=$id'>View </a>";
+                    echo "<a href='./features/view.php?id=$id'>View </a>";
 
                     if($username === $loggedInUser){
-                        echo "<a href='update.php?id=$id'>Update </a>";
-                        echo "<a href='delete.php?id=$id'>Delete </a>";
+                        echo "<a href='./features/update.php?id=$id'>Update </a>";
+                        echo "<a href='./features/delete.php?id=$id'>Delete </a>";
                     }
                 
                     echo "</td>";
@@ -96,7 +96,7 @@
 
         <!-- Link to add new song feature -->
         <p>
-            <a href="add_new_song.php">Add new song rating</a>
+            <a href="./features/add_new_song.php">Add new song rating</a>
         </p>
 
     </body>

@@ -88,7 +88,7 @@
                                 // Keep track of username in session
                                 $_SESSION['username'] = $s_username;   
                                 // Send user to main page
-                                header("Location: index.php");
+                                header("Location: ../index.php");
                             } else {
                                 $out_value = "Error executing prepared statement 2";
                             }
