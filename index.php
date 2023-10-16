@@ -79,8 +79,8 @@
                     echo "<a href='view.php?id=$id'>View </a>";
 
                     if($username === $loggedInUser){
-                        echo "<a href='update.php?id=id'>Update </a>";
-                        echo "<a href='delete.php?id=id'>Delete </a>";
+                        echo "<a href='update.php?id=$id'>Update </a>";
+                        echo "<a href='delete.php?id=$id'>Delete </a>";
                     }
                 
                     echo "</td>";
