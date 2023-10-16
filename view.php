@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -22,22 +23,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Summary describing content on website for brower to use -->
-        <meta name="description" content="Music rating web app log-in/rating page"/>
+        <meta name="description" content="Music rating web app view a single song rating page"/>
 
         <title>MusicUnited View Rating</title>
-
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
 
     </head>
 
     <body>
+        <!-- Logged in message -->
         <p style="text-align: left;">
             You are logged in as user: 
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            </br><a href="logout.php">Log Out</a>
+            <a href="logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -69,6 +68,7 @@
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_bind_result($stmt, $username, $artist, $song, $rating);
                 
+                // Fetch result from statement and then echo out results, else show error
                 if (mysqli_stmt_fetch($stmt)) {
                     echo "<p>Username</br></br> <strong>$username</strong></p>";
                     echo "<p>Artist</br></br> <strong>$artist</strong></p>";
@@ -83,6 +83,9 @@
             } else {
                 echo "Error: Could not execute prepared statekemtn ";
             }
+        
+            // Close SQL connection.
+            $conn->close();
         ?>
 
         <p>

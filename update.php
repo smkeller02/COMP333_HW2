@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -22,22 +23,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Summary describing content on website for brower to use -->
-        <meta name="description" content="Music rating web app log-in/rating page"/>
+        <meta name="description" content="Music rating web app update rating page"/>
 
-        <title>MusicUnited Login</title>
-
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
+        <title>MusicUnited Update Ratings Page</title>
     </head>
 
     <body>
+        <!-- Logged in message -->
         <p style="text-align: left;">
             You are logged in as user: 
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            </br></br><a href="logout.php">Log Out</a>
+            <a href="logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -93,9 +91,11 @@
                                 $out_value = "Error: " . $conn->error;
                             }
                             // Close statment
+
                         } else {
                             $out_value = "Error: Could not execute prepared statement ";
                         }
+
                     } else {
                     $out_value = "Error: Rating must be between 1 and 5.";
                     mysqli_stmt_close($stmt);
@@ -145,9 +145,9 @@
                 }
             }
     
-
-
+            // Get ID
             $s_id = $_GET['id'];
+
 
             // Parametricize and prepare statment
             $stmt = mysqli_prepare($conn, "SELECT username, artist, song, rating FROM ratings WHERE id =?");
@@ -158,11 +158,11 @@
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_bind_result($stmt, $username, $current_artist, $current_song, $current_rating);
                 
+                // Fetch result of prepared statement and check if there are any results for the given ID, else show error
                 if (mysqli_stmt_fetch($stmt)) {
                 } else {
                     echo "No data found for ID: $s_id";
                 }
-
                 // Close the statement
                 mysqli_stmt_close($stmt);
             } else {

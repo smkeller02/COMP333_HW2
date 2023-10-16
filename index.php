@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -26,14 +27,12 @@
 
         <title>MusicUnited Main Ratings Page</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
         <p>
-            User: 
+            <!-- Logged in message -->
+            You are logged in as user:
                 <?php
                 echo $_SESSION['username']; 
                 ?>
@@ -45,9 +44,7 @@
         </h2>
 
         <?php
-        $loggedInUser = $_SESSION['username'];
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1); 
+            $loggedInUser = $_SESSION['username'];
             $servername = "localhost";
             $username = "root";
             $password = "";
@@ -69,12 +66,12 @@
                 // Execute prepared query and bind output of prepared statement to variables
                 mysqli_stmt_bind_result($stmt, $id, $username, $artist, $song, $rating);
                 mysqli_stmt_store_result($stmt);
-
+                //Create table
                 echo "<table border=1px>";
                 echo "<tr><th>ID</th><th>Username</th><th>Artist</th><th>Song</th><th>Rating</th><th>Action</th></tr>";
                 while (mysqli_stmt_fetch($stmt)) {
                     echo "<tr><td>$id</td><td>$username</td><td>$artist</td><td>$song</td><td>$rating</td>";
-                    
+                    //Create appropriate actions column depending on who is logged in
                     echo "<td>";
                     echo "<a href='view.php?id=$id'>View </a>";
 
@@ -87,6 +84,7 @@
                     echo "</tr>";
                 }
                 echo "</table>";
+
                 // Close the statement
                 mysqli_stmt_close($stmt);
             } else {
@@ -96,6 +94,7 @@
         $conn->close();
         ?>
 
+        <!-- Link to add new song feature -->
         <p>
             <a href="add_new_song.php">Add new song rating</a>
         </p>
