@@ -116,3 +116,10 @@ https://stackoverflow.com/questions/13624276/how-to-separate-table-rows-with-a-l
 https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/changing-a-commit-message - needed to learn how to change commit message
 https://stackoverflow.com/questions/6472123/why-is-php-session-destroy-not-working - could not figure out why session_destroy() wasn’t working
 https://www.geeksforgeeks.org/php-strlen-function/ - make sure password is at least 10 char long
+Query_Parameterization_Cheat_Sheet.html - learning to make SQL queries parameterized
+https://stackoverflow.com/questions/36366754/parameterized-queries-in-php-with-mysql-connection - learning to make SQL queries parameterized
+https://www.diffen.com/difference/GET-vs-POST-HTTP-Requests#:~:text=GET%20is%20less%20secure%20compared,or%20in%20web%20server%20logs - GET vs POST for security purposes for logging in and signing up users
+https://www.w3schools.com/PHP/php_mysql_update.asp - updating the sql database via php
+https://alexwebdevelop.com/php-password-hashing/ - understanding password hash
+https://www.geeksforgeeks.org/how-to-secure-hash-and-salt-for-php-passwords/ - understanding password hash
+https://www.w3schools.com/PHP/php_mysql_delete.asp - deleting the row in sql database via php
