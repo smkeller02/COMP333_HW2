@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -25,9 +26,6 @@
         <meta name="description" content="Music rating web app log-in/rating page"/>
 
         <title>MusicUnited LogOut</title>
-
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
 
     </head>
 

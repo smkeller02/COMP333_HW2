@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -26,15 +27,12 @@
 
         <title>MusicUnited Add New Song Page</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
-
-        <p>
-            User: 
+        <!-- Logged in message -->
+        <p style="text-align: left;">
+            You are logged in as user: 
                 <?php
                 echo $_SESSION['username']; 
                 ?>
@@ -72,7 +70,7 @@
                 if (!empty($s_artist) && !empty($s_song)) {
                     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
                         $stmt = mysqli_prepare($conn, "SELECT username, artist, song FROM ratings WHERE username = ? AND artist = ? AND song = ?");
-                
+                        
                         if ($stmt) {
                             mysqli_stmt_bind_param($stmt, "sss", $s_username, $s_artist, $s_song);
                             mysqli_stmt_execute($stmt);
@@ -85,10 +83,18 @@
                             } else {
                                 //If user hasn't, add data into table
                                 $stmt2 = mysqli_prepare($conn, "INSERT INTO ratings (username, artist, song, rating) VALUES (?, ?, ?, ?)");
-                                    // Close statement
+                                if ($stmt2) {
+                                    mysqli_stmt_bind_param($stmt2, "sssi", $s_username, $s_artist, $s_song, $s_rating);
+                                    // insert in database 
+                                    $result = mysqli_stmt_execute($stmt2);
+                                    if ($result) {                        
+                                        header("Location: index.php");
+                                    } else {
+                                        $out_value = "Error: " . $conn->error;
+                                    }
                                     mysqli_stmt_close($stmt2);
                                 } else {
-                                  $out_value = "Error: could not execute prepared statement 2";
+                                $out_value = "Error: could not execute prepared statement ";
                                 }
                             }
                             // Close statement

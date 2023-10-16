@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -22,22 +23,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Summary describing content on website for brower to use -->
-        <meta name="description" content="Music rating web app log-in/rating page"/>
+        <meta name="description" content="Music rating web app update rating page"/>
 
-        <title>MusicUnited Login</title>
-
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
+        <title>MusicUnited Update Ratings Page</title>
     </head>
 
     <body>
+        <!-- Logged in message -->
         <p style="text-align: left;">
             You are logged in as user: 
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            </br></br><a href="logout.php">Log Out</a>
+            <a href="logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -77,17 +75,19 @@
                 $s_rating = $_REQUEST['rating'];
             
                 if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
+                    // Preparing statement
                     $stmt = $conn->prepare("UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE username = ?");
-            
                     if ($stmt) {
+                        // Bind parameters and execute
                         mysqli_stmt_bind_param($stmt, "ssis", $s_artist, $s_song, $s_rating, $s_username);
                         $result = mysqli_stmt_execute($stmt);
-
+                        // If successful, redirect to main page, else show error
                         if ($result) {                        
                             header("Location: index.php");
                         } else {
                             $out_value = "Error: " . $conn->error;
                         }
+                        // Close statment
                         mysqli_stmt_close($stmt);
                     } else {
                         $out_value = "Error: Could not execute prepared statement ";
@@ -97,6 +97,7 @@
                 }
             }
 
+            // Get ID
             $s_id = $_REQUEST['id'];
 
             // Parametricize and prepare statment
@@ -108,11 +109,11 @@
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_bind_result($stmt, $username, $current_artist, $current_song, $current_rating);
                 
+                // Fetch result of prepared statement and check if there are any results for the given ID, else show error
                 if (mysqli_stmt_fetch($stmt)) {
                 } else {
                     echo "No data found for ID: $s_id";
                 }
-
                 // Close the statement
                 mysqli_stmt_close($stmt);
             } else {

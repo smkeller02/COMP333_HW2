@@ -23,9 +23,6 @@
 
         <title>MusicUnited Login</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
@@ -60,7 +57,7 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-                    $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE username = ? AND password = ?");
+                    $stmt = mysqli_prepare($conn,"SELECT * FROM users WHERE username = ? AND password = ?");
                     if ($stmt) {
                         // Bind parameters and execute query
                         mysqli_stmt_bind_param($stmt, "ss", $s_username, $s_password);
@@ -72,7 +69,7 @@
                         mysqli_stmt_close($stmt);
                         //If username and password found, take user to main page, otherwise give incorrect username/pw
                         if($row_num > 0) {
-                            //start session
+                            // Start session
                             session_start();
                             //Keep track of username in session
                             $_SESSION['username'] = $s_username;
