@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -22,16 +23,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Summary describing content on website for brower to use -->
-        <meta name="description" content="Music rating web app log-in/rating page"/>
+        <meta name="description" content="Music rating web app delete your rating page"/>
 
-        <title>MusicUnited Login</title>
-
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
+        <title>MusicUnited Rating Delete Page</title>
     </head>
 
     <body>
+        <!-- Logged in message -->
         <p style="text-align: left;">
             You are logged in as user: 
             <?php 
@@ -65,26 +63,29 @@
 
 
             if (isset($_POST["submit"])) {
-                $s_username = $_SESSION['username'];
-            
-                $stmt = $conn->prepare("DELETE FROM ratings WHERE username = ?");
+                $s_id = $_REQUEST['id'];
+                
+                // Prepare deletion statement
+                $stmt = $conn->prepare("DELETE FROM ratings WHERE id = ?");
             
                 if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, "s", $s_username);
+                    // Execute prepared query and bind output of prepared statement to variables
+                    mysqli_stmt_bind_param($stmt, "i", $s_id);
                     $result = mysqli_stmt_execute($stmt);
-
-                    if ($result) {                        
+                    // Send user back to main page if statement executed correctly, else show error
+                    if ($result) {   
                         header("Location: index.php");
                     } else {
                         $out_value = "Error: " . $conn->error;
                     }
+                    // Statement close
                     mysqli_stmt_close($stmt);
                 } else {
                     $out_value = "Error: Could not execute prepared statement ";
                 }
             }
 
-            // Close SQL connection.
+            // Close SQL connection
             $conn->close();
         ?>
 

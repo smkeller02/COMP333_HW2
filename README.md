@@ -97,6 +97,9 @@ login.php - login page for current users
 signup.php - signup page for new users
 add_new_song.php - page for users to add a new song and rating to the datatable
 logout.php - logs out current user by destroying session and takes user back to login page
+delete.php - prompts user to make sure they want to delete given song, then if yes, deletes it (only can be done with the users data, no one else)
+update.php - updates song, artist, and/or rating for user (only can be done with the users data, no one else)
+view.php - displays a clean page of a given rating including song, artist, rating, and username of rater
 Sydney_XAMPP - Screenshot of local XAMPP developement environment
 Sydney_user_table_structure.png - Screenshot of user_table structure from phpMyAdmin
 Sydney_user_table.png - Screenshot of user_table from phpMyAdmin

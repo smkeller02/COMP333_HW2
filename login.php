@@ -58,6 +58,7 @@
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
                     $stmt = mysqli_prepare($conn,"SELECT password FROM users WHERE username = ?");
+
                     if ($stmt) {
                         // Bind parameters and execute query
                         mysqli_stmt_bind_param($stmt, "s", $s_username);
