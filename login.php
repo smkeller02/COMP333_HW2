@@ -23,9 +23,6 @@
 
         <title>MusicUnited Login</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
@@ -72,7 +69,7 @@
                         mysqli_stmt_close($stmt);
                         //If username and password found, take user to main page, otherwise give incorrect username/pw
                         if($row_num > 0) {
-                            //start session
+                            // Start session
                             session_start();
                             //Keep track of username in session
                             $_SESSION['username'] = $s_username;

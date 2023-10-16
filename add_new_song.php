@@ -5,6 +5,7 @@
     Minji Woo (mwoo@wesleyan.edu)
 -->
 <?php
+    // Start session
     session_start();
 ?>
 <!DOCTYPE html>
@@ -26,15 +27,12 @@
 
         <title>MusicUnited Add New Song Page</title>
 
-        <!-- Linking CSS style sheet -->
-        <link rel="stylesheet" href="style_sheet.css" />
-
     </head>
 
     <body>
-
+        <!-- Logged in message -->
         <p style="text-align: right;">
-            User: 
+            You are logged in as user: 
                 <?php
                 echo $_SESSION['username']; 
                 ?>
@@ -72,7 +70,7 @@
                 if (!empty($s_artist) && !empty($s_song)) {
                     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
                         $stmt = mysqli_prepare($conn, "SELECT username, artist, song FROM ratings WHERE username = ? AND artist = ? AND song = ?");
-                
+                        
                         if ($stmt) {
                             mysqli_stmt_bind_param($stmt, "sss", $s_username, $s_artist, $s_song);
                             mysqli_stmt_execute($stmt);
