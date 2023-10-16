@@ -53,6 +53,8 @@
         </p>
 
         <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
             // Setting up variables
             $servername = "localhost";
             $username = "root";
@@ -74,97 +76,76 @@
                 $s_rating = $_REQUEST['rating'];
                 $s_id = $_REQUEST['id'];
     
-                if(isset($_GET['id']) && !empty($_GET['id'])){
+                // Check that the user entered data in the form.
+                if (!empty($s_artist) && !empty($s_song) && !empty($s_rating)) {
                     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
-                        $check_stmt = $conn->prepare("SELECT * FROM ratings WHERE username = ? AND song = ? AND artist=? AND id=?");
-                        // Preparing statement
-                        // $stmt = $conn->prepare("UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE id = ?");
-                        if ($stmt) {
-                            // Bind parameters and execute
+                        // Check if the rating exists
+                        $check_query = "SELECT * FROM ratings WHERE username = ? AND song = ? AND artist = ? AND id = ?";
+                        $check_stmt = mysqli_prepare($conn, $check_query);
+                        mysqli_stmt_bind_param($check_stmt, "ssii", $s_username, $s_song, $s_artist, $s_id);
+                        mysqli_stmt_execute($check_stmt);
+                        mysqli_stmt_store_result($check_stmt);
+                        $rows = mysqli_stmt_num_rows($check_stmt);
+                        mysqli_stmt_close($check_stmt);
+            
+                        if ($rows > 0) {
+                            // Check that user isnt updating their artist and song to an artist and song they have already rated under a different ID
+                            $check_duplicate_query = "SELECT id FROM ratings WHERE username = ? AND artist = ? AND song = ? AND id != ?";
+                            $check_duplicate_stmt = mysqli_prepare($conn, $check_duplicate_query);
+                            mysqli_stmt_bind_param($check_duplicate_stmt, "ssii", $s_username, $s_artist, $s_song, $s_id);
+                            mysqli_stmt_execute($check_duplicate_stmt);
+                            mysqli_stmt_store_result($check_duplicate_stmt);
+                            $duplicate_rows = mysqli_stmt_num_rows($check_duplicate_stmt);
+                            mysqli_stmt_close($check_duplicate_stmt);
+
+                        if ($duplicate_rows > 0) {
+                            $out_value = "Error: You've already rated this artist and song under a different ID.";
+                        } else {
+                            // Update the rating
+                            $update_query = "UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE id = ?";
+                            $stmt = mysqli_prepare($conn, $update_query);
                             mysqli_stmt_bind_param($stmt, "ssii", $s_artist, $s_song, $s_rating, $s_id);
                             $result = mysqli_stmt_execute($stmt);
-                            // If successful, redirect to main page, else show error
-                            if ($result) {                        
+                            if ($result) {
                                 header("Location: index.php");
-                                exit();
                             } else {
-                                $out_value = "Error: " . $conn->error;
+                                $out_value = "Error: " . mysqli_error($conn);
                             }
-                            // Close statment
-
-                        } else {
-                            $out_value = "Error: Could not execute prepared statement ";
+                            mysqli_stmt_close($stmt);
                         }
-
                     } else {
-                    $out_value = "Error: Rating must be between 1 and 5.";
-                    mysqli_stmt_close($stmt);
+                        $out_value = "Error: You have already rated this song under a different ID.";
+                    }
+                    } else {
+                        $out_value = "Error: Rating must be between 1 and 5.";
+                    }
+                } else {
+                    $out_value = "Error: Not all fields filled out";
                 }
 
-                    // if(!empty($s_song) && !empty($s_artist) && !empty($s_rating)){
-                    //     if ($s_rating <= 5 && $s_rating >= 1 && is_numeric($s_rating)) { //Checking for invalid rating type
-                    //         $check_stmt = $conn->prepare("SELECT * FROM ratings WHERE username = ? AND song = ? AND artist=? AND id=?");
-                    //         // $stmt = $conn->prepare("UPDATE ratings SET rating = ? WHERE username = ? AND song = ? AND artist = ?");
-                        
-                    //         if ($check_stmt) {
-                    //             mysqli_stmt_bind_param($check_stmt, "sssi", $s_username, $s_song, $s_artist, $s_id);
-                    //             mysqli_stmt_execute($check_stmt);
-                    //             mysqli_stmt_store_result($check_stmt);
-    
-                    //             if (mysqli_stmt_num_rows($check_stmt) > 1) {
-                    //                 // The user has the same song already rated in database
-                    //                 $out_value = "Error: You have already rated this song.";
-                    //             } else {
-                    //                 The user has not rated this song yet, so update
-                    //                 $update_stmt = $conn->prepare("UPDATE ratings SET song = ?, artist = ?, rating = ? WHERE id = ?");
-                                        
-                    //                 if ($update_stmt) {
-                    //                     mysqli_stmt_bind_param($update_stmt, "ssii", $s_song, $s_artist, $s_rating, $s_id);
-                    //                     $result = mysqli_stmt_execute($update_stmt);
-                                            
-                    //                     if ($result) {
-                    //                         header("Location: index.php");
-                    //                     } else {
-                    //                         $out_value = "Error: " . $conn->error;
-                    //                     }
-                    //                     mysqli_stmt_close($update_stmt);
-                    //                 } else {
-                    //                     $out_value = "Error: Could not execute the update prepared statement";
-                    //                 }
-                    //             }
-                    //             mysqli_stmt_close($check_stmt);
-                    //         } else {
-                    //             $out_value = "Error: Could not execute prepared statement ";
-                    //         }
-                    //     } else {
-                    //         $out_value = "Error: Rating must be between 1 and 5.";
-                    //     }
-                    // } else {
-                    //     $out_value = "Error: Not all fields filled out";
-                    // }
-                }
-            }
-    
+            }     
+
+        // Auto-fill form
             // Get ID
             $s_id = $_GET['id'];
 
 
             // Parametricize and prepare statment
-            $stmt = mysqli_prepare($conn, "SELECT username, artist, song, rating FROM ratings WHERE id =?");
+            $stmt2 = mysqli_prepare($conn, "SELECT username, artist, song, rating FROM ratings WHERE id =?");
 
-            if ($stmt) {
+            if ($stmt2) {
                 // Execute prepared query and bind output of prepared statement to variables
-                mysqli_stmt_bind_param($stmt, "i", $s_id);
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_bind_result($stmt, $username, $current_artist, $current_song, $current_rating);
+                mysqli_stmt_bind_param($stmt2, "i", $s_id);
+                mysqli_stmt_execute($stmt2);
+                mysqli_stmt_bind_result($stmt2, $username, $current_artist, $current_song, $current_rating);
                 
                 // Fetch result of prepared statement and check if there are any results for the given ID, else show error
-                if (mysqli_stmt_fetch($stmt)) {
+                if (mysqli_stmt_fetch($stmt2)) {
                 } else {
                     echo "No data found for ID: $s_id";
                 }
                 // Close the statement
-                mysqli_stmt_close($stmt);
+                mysqli_stmt_close($stmt2);
             } else {
                 echo "Error: Could not execute prepared statekemtn ";
             }
