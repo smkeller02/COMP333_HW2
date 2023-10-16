@@ -8,7 +8,7 @@ Minji Woo (<mwoo@wesleyan.edu>)
 Designing and implementing a relational database scheme using the MySQL database language. Based on the LAMP stack, designing and implementing a CRUD web app gluing a MySQL database to an HTML frontend via PHP. Learning how to set up development and production environments as well as deploying a web app.
 
 ## Setting up the developement environment:
-Screenshot of local XAMPP developement environment
+Screenshot of local XAMPP developement environment (Sydney)
 </br><img align ="center"
 height="32%"
 width="32%"
@@ -16,7 +16,7 @@ src="./Images/Sydney_XAMPP.png"
 alt="Screenshot of local XAMPP developement environment"
 />
 
-Screenshot of user table structure
+Screenshot of user table structure (Sydney)
 </br><img align ="center"
 height="32%"
 width="32%"
@@ -24,7 +24,7 @@ src="./Images/Sydney_user_table_structure.png"
 alt="Screenshot of user_table structure"
 />
 
-Screenshot of user table data
+Screenshot of user table data (Sydney)
 </br><img align ="center"
 height="32%"
 width="32%"
@@ -32,7 +32,7 @@ src="./Images/Sydney_user_table.png"
 alt="Screenshot of user_table"
 />
 
-Screenshot of ratings table structure
+Screenshot of ratings table structure (Sydney)
 </br><img align ="center"
 height="32%"
 width="32%"
@@ -40,11 +40,51 @@ src="./Images/Sydney_ratings_table_structure.png"
 alt="Screenshot of ratings_table structure"
 />
 
-Screenshot of ratings table data
+Screenshot of ratings table data (Sydney)
 </br><img align ="center"
 height="32%"
 width="32%"
 src="./Images/Sydney_ratings_table.png"
+alt="Screenshot of ratings_table"
+/>
+
+Screenshot of local XAMPP developement environment (Minji)
+</br><img align ="center"
+height="32%"
+width="32%"
+src="./Images/minji_xampp.png"
+alt="Screenshot of local XAMPP developement environment"
+/>
+
+Screenshot of user table structure (Minji)
+</br><img align ="center"
+height="32%"
+width="32%"
+src="./Images/minji_users_table_structure.png"
+alt="Screenshot of user_table structure"
+/>
+
+Screenshot of user table data (Minji)
+</br><img align ="center"
+height="32%"
+width="32%"
+src="./Images/minji_users_table_data.png"
+alt="Screenshot of user_table"
+/>
+
+Screenshot of ratings table structure (Minji)
+</br><img align ="center"
+height="32%"
+width="32%"
+src="./Images/minji_ratings_table_structure.png"
+alt="Screenshot of ratings_table structure"
+/>
+
+Screenshot of ratings table data (Minji)
+</br><img align ="center"
+height="32%"
+width="32%"
+src="./Images/minji_ratings_table_data.png"
 alt="Screenshot of ratings_table"
 />
 
