@@ -36,7 +36,7 @@
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            <a href="logout.php">Log Out</a>
+            <br><a href="../signup,login,out/logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -89,7 +89,7 @@
         ?>
 
         <p>
-            <a href="index.php">Back</a>
+            <a href="../index.php">Back</a>
         </p>
 
     </body>

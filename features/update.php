@@ -35,7 +35,7 @@
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            <a href="logout.php">Log Out</a>
+            <a href="../signup,login,out/logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -90,7 +90,7 @@
                             $result = mysqli_stmt_execute($stmt);
                             if ($result) {
                                 // Send user to main page if successful update
-                                header("Location: index.php");
+                                header("Location: ../index.php");
                             } else {
                                 $out_value = "Error: " . mysqli_error($conn);
                             }
@@ -142,7 +142,7 @@
             Rating <input type="number" name="rating" placeholder="Enter your rating" value="<?php echo $current_rating; ?>"/><br>
             <input type="submit" name="submit" value="Submit"/>
             <p>
-                <a href="index.php">Cancel</a>
+                <a href="../index.php">Cancel</a>
             </p>
             <!--
             Make sure that there is a value available for $out_value.

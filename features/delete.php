@@ -35,7 +35,7 @@
             <?php 
                 echo $_SESSION['username']; 
             ?>
-            </br></br><a href="logout.php">Log Out</a>
+            </br></br><a href="../signup,login,out/logout.php">Log Out</a>
         </p>
 
         <h1>
@@ -74,7 +74,7 @@
                     $result = mysqli_stmt_execute($stmt);
                     // Send user back to main page if statement executed correctly, else show error
                     if ($result) {   
-                        header("Location: index.php");
+                        header("Location: ../index.php");
                     } else {
                         $out_value = "Error: " . $conn->error;
                     }
@@ -93,7 +93,7 @@
         <form method="POST" action="">
             <input type="submit" name="submit" value="Yes"/>
             <p>
-                <a href="index.php">No</a>
+                <a href="../index.php">No</a>
             </p>
             <!--
             Make sure that there is a value available for $out_value.

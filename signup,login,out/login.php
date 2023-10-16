@@ -73,7 +73,7 @@
                             if(password_verify($s_password, $hashed_password)){
                                 session_start();
                                 $_SESSION['username'] = $s_username;
-                                header("Location: index.php");
+                                header("Location: ../index.php");
                             } else {
                                 $out_value = "Incorrect username and/or password.";
                             }

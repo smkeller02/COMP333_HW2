@@ -36,7 +36,7 @@
                 <?php
                 echo $_SESSION['username']; 
                 ?>
-            </br><a href="logout.php">Log Out</a>
+            </br><a href="../signup,login,out/logout.php">Log Out</a>
         </p>
 
 
@@ -88,7 +88,7 @@
                                     // insert in database 
                                     $result = mysqli_stmt_execute($stmt2);
                                     if ($result) {                        
-                                        header("Location: index.php");
+                                        header("Location: ../index.php");
                                     } else {
                                         $out_value = "Error: " . $conn->error;
                                     }
@@ -133,7 +133,7 @@
     </form>
 
     <p>
-        <a href="index.php">cancel</a>
+        <a href="../index.php">cancel</a>
     </p>
 
     </body>
