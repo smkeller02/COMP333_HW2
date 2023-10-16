@@ -31,7 +31,7 @@
 
     <body>
         <!-- Logged in message -->
-        <p style="text-align: right;">
+        <p style="text-align: left;">
             You are logged in as user: 
                 <?php
                 echo $_SESSION['username']; 
