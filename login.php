@@ -57,27 +57,31 @@
                 // Check that the user entered data in the form.
                 if(!empty($s_username) && !empty($s_password)){
                     // If so, prepare SQL query with the data to query the database.
-                    $stmt = mysqli_prepare($conn,"SELECT * FROM users WHERE username = ? AND password = ?");
+                    $stmt = mysqli_prepare($conn,"SELECT password FROM users WHERE username = ?");
+
                     if ($stmt) {
                         // Bind parameters and execute query
-                        mysqli_stmt_bind_param($stmt, "ss", $s_username, $s_password);
+                        mysqli_stmt_bind_param($stmt, "s", $s_username);
                         $result = mysqli_stmt_execute($stmt);
                         // mysqli_query performs a query against the database.
                         mysqli_stmt_store_result($stmt);
                         $row_num = mysqli_stmt_num_rows($stmt);
-                        // Close statement
-                        mysqli_stmt_close($stmt);
                         //If username and password found, take user to main page, otherwise give incorrect username/pw
                         if($row_num > 0) {
-                            // Start session
-                            session_start();
-                            //Keep track of username in session
-                            $_SESSION['username'] = $s_username;
-                            //Send user to main page
-                            header("Location: index.php");
+                            mysqli_stmt_bind_result($stmt, $hashed_password);
+                            mysqli_stmt_fetch($stmt);
+                            if(password_verify($s_password, $hashed_password)){
+                                session_start();
+                                $_SESSION['username'] = $s_username;
+                                header("Location: index.php");
+                            } else {
+                                $out_value = "Incorrect username and/or password.";
+                            }
                         } else {
                             $out_value = "Incorrect username and/or password.";
                         }
+                        // Close statement
+                        mysqli_stmt_close($stmt);
                     } else {
                         $out_value = "Error: Could not execute prepared statement";
                     }
