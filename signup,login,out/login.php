@@ -35,10 +35,14 @@
         </h2>
         <?php
             // Setting up variables
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "music_db";
+            //$servername = "localhost";
+            //$username = "root";
+            //$password = "";
+            //$dbname = "music_db";
+            $servername = "sql313.infinityfree.com";
+            $username = "if0_35135068";
+            $password = "WQFLcEyVvOrKu";
+            $dbname = "if0_35135068_music_db";
 
             // Create connection
             $conn = new mysqli($servername, $username, $password, $dbname);
