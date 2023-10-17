@@ -45,6 +45,10 @@
         </h1>
 
         <?php 
+            //$servername = "localhost";
+            //$username = "root";
+            //$password = "";
+            //$dbname = "music_db";
             $servername = "sql313.infinityfree.com";
             $username = "if0_35135068";
             $password = "WQFLcEyVvOrKu";
