@@ -93,7 +93,7 @@ URL for deployed InfinityFree site:
 https://smkeller.kesug.com/COMP333_HW2/signup,login,out/login.php
 
 ## How to run the code:
-Locally in a browser using XAMPP localhost URL (need to have the proper mySQL databases set up)
+Locally in a browser using InfinityFree URL
 
 # Files:
 index.php - main homepage for rating web app
